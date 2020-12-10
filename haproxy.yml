@@ -1,0 +1,84 @@
+- hosts: webserver
+  tasks:
+  - name: "Installing httpd software"
+    package:
+            name: "httpd"
+
+  - name: "Starting httpd services"
+    service:
+            name: "httpd"
+            state: started
+
+  - name: "Hosting Webpages"
+    template:
+            src: "webpages/index.html"
+            dest: "/var/www/html/"
+
+  - name: "Copying image used in webpage on Document Root"
+    template:
+            src: "webpages/images.jpg"
+            dest: "/var/www/html/"
+
+  - name: "gif file also copied"
+    template:
+            src: "webpages/proj.gif"
+            dest: "/var/www/html/"
+
+  - name: "Exposing at port 80"
+    ansible.posix.firewalld:
+            port: "80/tcp"
+            permanent: yes
+            state: enabled
+            immediate: yes
+           
+
+- hosts: proxy
+  vars_prompt:
+          - name: proxy_port
+            prompt: "Enter port no. for Haproxy server"
+            private: no
+  tasks:
+  - name: "Installing Apache Haproxy software"
+    package:
+            name: "haproxy"
+
+  - name: "Configuring Haproxy Configuration file"
+    template:
+            src: "requirements/configfile.cfg"
+            dest: "/etc/haproxy/haproxy.cfg"
+    register: configcheck
+
+  - name: "Starting Firewalld services if not started"
+    service:
+            name: "firewalld"
+            state: started
+
+  - name: "Starting Firewalld services if not started"
+    service:
+            name: "firewalld"
+            state: started
+
+  - name: "Exposing the Proxy to port 8080"
+    ansible.posix.firewalld:
+            port: "{{ proxy_port }}/tcp"
+            permanent: yes
+            state: enabled 
+            immediate: yes
+
+  - name: "Starting services"
+    service:
+            name: "haproxy"
+            state: started
+
+    when: configcheck.changed == false
+  
+  - name: "Restarting if changes done to Haproxy Config file"
+    service:
+            name: "haproxy"
+            state: restarted
+    when: configcheck.changed == true
+
+  - debug:
+          msg: "URL: http://{{ ansible_facts['enp0s8']['ipv4']['address'] }}:{{ proxy_port }}"
+
+

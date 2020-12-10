@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>My Website</title>
+	<style type="text/css">
+		body {
+			background-color: black;
+			margin: 0;
+		}
+		.ext {
+			color: white;
+			text-align: center;
+			border: thin solid #0000FF;
+			height: 10em;
+			background-image: url('images.png');			
+		}
+		#indiv {
+			margin-top: 5px;
+		}
+		.center {
+			display: block;
+			margin-left: auto;
+			margin-right: auto;
+			width: 60%;
+		}
+		#haproxy {
+			font-size: 5em;
+			border-radius: 5px;
+		}
+		#ansible {
+			color: red;
+			font-size: 5em;
+			border-radius: 5px;
+		}
+		#web {
+			font-size: 3em;
+			color: yellow;
+		}
+		#ip {
+			border: thin solid white;
+			color: black;
+			background-color: white;
+			font-size: 3em;
+			border-radius: 5px;
+		}
+	</style>
+</head>
+<body>
+	<div class="ext">
+		<div id="indiv">
+			<font id="haproxy">HAProxy Configured Using </font>
+			<font id="ansible">ANSIBLE</font><br />
+			<font id="web">WebServer IP Address: </font>
+			<font id="ip">{{ ansible_facts['enp0s8']['ipv4']['address'] }}</font>
+		</div>
+	</div>
+	<div>
+		<img src="proj.gif" class="center">
+	</div>
+</body>
+</html>
