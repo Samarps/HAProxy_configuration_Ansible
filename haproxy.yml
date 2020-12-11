@@ -11,26 +11,21 @@
 
   - name: "Hosting Webpages"
     template:
-            src: "webpages/index.html"
+            src: "webpage/index.html"
             dest: "/var/www/html/"
 
-  - name: "Copying image used in webpage on Document Root"
-    template:
-            src: "webpages/images.jpg"
-            dest: "/var/www/html/"
+  - name: "Starting Firewalld services if not started"
+    service:
+            name: "firewalld"
+            state: started
 
-  - name: "gif file also copied"
-    template:
-            src: "webpages/proj.gif"
-            dest: "/var/www/html/"
-
-  - name: "Exposing at port 80"
+  - name: "Exposing webservices at port no. 80"
     ansible.posix.firewalld:
             port: "80/tcp"
             permanent: yes
-            state: enabled
+            state: enabled 
             immediate: yes
-           
+
 
 - hosts: proxy
   vars_prompt:
@@ -44,14 +39,9 @@
 
   - name: "Configuring Haproxy Configuration file"
     template:
-            src: "requirements/configfile.cfg"
+            src: "requirement/configfile.cfg"
             dest: "/etc/haproxy/haproxy.cfg"
     register: configcheck
-
-  - name: "Starting Firewalld services if not started"
-    service:
-            name: "firewalld"
-            state: started
 
   - name: "Starting Firewalld services if not started"
     service:
@@ -78,7 +68,8 @@
             state: restarted
     when: configcheck.changed == true
 
-  - debug:
-          msg: "URL: http://{{ ansible_facts['enp0s8']['ipv4']['address'] }}:{{ proxy_port }}"
+  - name: "Use below URL to access the hosted webpage"
+    debug:
+          msg: "http://{{ ansible_facts['enp0s8']['ipv4']['address'] }}:{{ proxy_port }}"
 
 
