@@ -9,6 +9,6 @@ https://samar10pratapsingh.medium.com/case-study-ansible-making-openstack-simple
 🔰 Write an Ansible PlayBook that does the following operations in the managed nodes:\
 🔹 Configurs HAProxy one Managed Node\
 🔹 Configures Apache Webserver (HTTPD) on other Managed Nodes\
-🔹 It should automatically update the Haproxy Configuration file (configured on one of the Managed Node) each time a new Managed Node joins th inventory for webservice configuration.\
+🔹 It should automatically update the Haproxy Configuration file (configured on one of the Managed Node) each time a new Managed Node joins th inventory for webservice configuration.
 
 Hope you guys liked it! Thanks for reading, I'll meet you in the next one. 😊
