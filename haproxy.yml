@@ -8,6 +8,7 @@
     service:
             name: "httpd"
             state: started
+            enabled: yes
 
   - name: "Hosting Webpages"
     template:
@@ -18,8 +19,9 @@
     service:
             name: "firewalld"
             state: started
+            enabled: yes
 
-  - name: "Exposing webservices at port no. 80"
+  - name: "Creating Firewall rule to expose webservices on port no. 80"
     ansible.posix.firewalld:
             port: "80/tcp"
             permanent: yes
@@ -47,8 +49,9 @@
     service:
             name: "firewalld"
             state: started
+            enabled: yes
 
-  - name: "Exposing the Proxy to port 8080"
+  - name: "Creating Firewall rule to expose the HAProxy service on port no. {{ proxy_port }}"
     ansible.posix.firewalld:
             port: "{{ proxy_port }}/tcp"
             permanent: yes
@@ -59,6 +62,7 @@
     service:
             name: "haproxy"
             state: started
+            enabled: yes
 
     when: configcheck.changed == false
   
@@ -66,6 +70,7 @@
     service:
             name: "haproxy"
             state: restarted
+            enabled: yes
     when: configcheck.changed == true
 
   - name: "Use below URL to access the hosted webpage"
